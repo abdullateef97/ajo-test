@@ -82,6 +82,14 @@ Object.defineProperty(HTTPStatus, 'REQUEST_TIMEOUT', {
   configurable: false,
 });
 
+
+Object.defineProperty(HTTPStatus, 'CONFLICT', {
+  value: 409,
+  writable: false,
+  enumerable: true,
+  configurable: false,
+});
+
 Object.defineProperty(HTTPStatus, 'INTERNAL_SERVER_ERROR', {
   value: 500,
   writable: false,

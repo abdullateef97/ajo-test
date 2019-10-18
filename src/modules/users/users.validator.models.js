@@ -1,4 +1,4 @@
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 
 const LoginValidatorModel = Joi.object().keys({
     email: Joi.string().email().required(),
@@ -9,7 +9,7 @@ const SignUpValidatorModel = Joi.object().keys({
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
     pin: Joi.string().length(4).required(),
-    name: Joi.string().required(),
+    username: Joi.string().required(),
     phone_number: Joi.string().required()
 })
 

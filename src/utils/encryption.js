@@ -13,12 +13,10 @@ if (
 }
 
 const createAccessToken = data => jwt.sign(data, process.env.TOKEN_SECRET, {
-  expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
   algorithm: process.env.ACCESS_TOKEN_ALGO,
 });
 
 const decryptAccessToken = token => jwt.decode(token, process.env.TOKEN_SECRET, {
-  expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
   algorithm: process.env.ACCESS_TOKEN_ALGO,
 });
 

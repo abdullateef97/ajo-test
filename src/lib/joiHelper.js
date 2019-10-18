@@ -1,4 +1,4 @@
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 const customError = require('../utils/handleCustomErrors')
 const HttpStatus = require('../constants/httpStatus')
 const responseMessages = require('../constants/responseMessages');

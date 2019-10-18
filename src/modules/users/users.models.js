@@ -24,12 +24,13 @@ const userSchema = new Schema({
     required: true
   },
   pin: {
-      type: Number,
+      type: String,
       required: true
   },
-  name: {
+  username: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   phone_number: {
     type: Number,
@@ -37,11 +38,10 @@ const userSchema = new Schema({
   },
   status: {
     type: Number,
-    required: true
   },
   account_balance: {
     type: Number,
-    default: 0.0
+    default: 0.00
   },
 }, {
   timestamps: true,

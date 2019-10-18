@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const config = require('../config/settings');
+const config = require('../constants/config');
 
 class MongoDBHelper {
   /**
