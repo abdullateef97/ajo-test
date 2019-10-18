@@ -1,25 +1,65 @@
-const { MySQL } = require('../../db');
+const mongo = require('../../db/mongodb')
 const { hashPayload, jwt } = require('../../utils');
+const mongoDBHelper = require('../../lib/mongoDBHelper');
+const {validateSchema} = require('../../lib/joiHelper')
+const userModel = require('./users.models');
+const {LoginValidatorModel, SignUpValidatorModel} = require('./users.validator.models')
+const {_generateRandomString} = require('../../lib/helper')
+const {hashPassword, comparePassword} = require('../../lib/passwordHelper')
+const {createAccessToken} = require('../../utils/encryption')
 
-async function createNewUser({
-  email, password, firstName, lastName,
-}) {
-  const hashedPassword = await hashPayload(password);
-  const user = await MySQL.sequelize.query(
-    'INSERT INTO users (email, password, first_name, last_name) VALUES (?, ?, ?, ?)',
-    {
-      type: MySQL.sequelize.QueryTypes.INSERT,
-      replacements: [email, hashedPassword, firstName, lastName],
-    },
-  );
-  return {
-    user: {
-      id: user[0],
-      email,
-      firstName,
-      lastName,
-    },
-  };
+const UsersMongoDBHelper = new mongoDBHelper(mongo, userModel);
+
+// async function createNewUser({
+//   email, password, firstName, lastName,
+// }) {
+//   const hashedPassword = await hashPayload(password);
+//   const user = await MySQL.sequelize.query(
+//     'INSERT INTO users (email, password, first_name, last_name) VALUES (?, ?, ?, ?)',
+//     {
+//       type: MySQL.sequelize.QueryTypes.INSERT,
+//       replacements: [email, hashedPassword, firstName, lastName],
+//     },
+//   );
+//   return {
+//     user: {
+//       id: user[0],
+//       email,
+//       firstName,
+//       lastName,
+//     },
+//   };
+// }
+
+const createNewUser = async (req, res) => {
+  try{
+    let {body} = req;
+    await validateSchema(res, SignUpValidatorModel, body);
+    let wallet_id = await _genUniqueWalletId();
+    let new_user = {...body, wallet_id};
+    let hashed_user = await hashPassword(new_user);
+
+    let saved_user = await UsersMongoDBHelper.save(hashed_user);
+
+    let token_data = {
+      user_id: saved_user._id,
+    }
+    let token = createAccessToken(token_data);
+    return {token, user:saved_user}
+  }catch(error){
+    throw new Error(error)
+  }
+}
+
+const _genUniqueWalletId = async () => {
+  let wallet_id = _generateRandomString(12);
+  try{
+    let existing_user = await UsersMongoDBHelper.getOneOptimized({params: {wallet_id}});
+    if(existing_user) return genUniqueWalletId();
+    return Promise.resolve(wallet_id);
+  }catch(error){
+    Promise.reject(error)
+  }
 }
 
 async function loginUser({ email, password }) {
