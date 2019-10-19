@@ -2,7 +2,8 @@ const config  =  {
     mongodb: {
         collections: {
             users: 'users',
-            deposits: 'deps'
+            deposits: 'deps',
+            transfers: 'trans'
         },
         query_limit: 15
     },
@@ -14,6 +15,11 @@ const config  =  {
     },
     paystack: {
         secret_key: process.env.PAYSTACK_SECRET
+    },
+    kudiSms: {
+        user: process.env.QUICK_SMS_USER,
+        password: process.env.QUICK_SMS_PASS,
+        messageSender: 'AJOCARD - TEST'
     }
 }
 
