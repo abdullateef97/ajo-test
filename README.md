@@ -22,6 +22,9 @@ Run `npm install` to install dependencies
 https://documenter.getpostman.com/view/1381515/SVtbPQA1?version=latest
 
 ##  To run
+create a `.env` file in the root of the project and copy the content of sample.env into it
+
+### to run
 
     npm run dev
 
