@@ -3,6 +3,8 @@ const {InitiateDepositValidatorModel} = require('./dep.validator.models')
 const {
   initiateNewDeposit,
   verifyDeposit,
+  getAllDeposits,
+  getDepositDetails
 } = require('./dep.services');
 const { sendResponse, handleCustomError } = require('../../utils');
 const ResponseMessages = require('../../constants/responseMessages');
@@ -31,12 +33,23 @@ async function verifyDepositController(req, res) {
   }
 }
 
-async function getUserDetailsController(req, res) {
+async function getAllDepositsController(req, res) {
   try {
     let {userId} = req;
-    let response = await getUserDetails(userId);
+    let response = await getAllDeposits(userId);
 
-    return sendResponse(res, httpStatus.OK, response, 'User Details')
+    return sendResponse(res, httpStatus.OK, response, 'All Deposits')
+  }catch(error) {
+    return handleCustomError(res, error)
+  }
+}
+
+async function getDepositsDetailsController(req, res) {
+  try {
+    let {userId, params: {deps_id}} = req;
+    let response = await getDepositDetails(deps_id);
+
+    return sendResponse(res, httpStatus.OK, response, 'Deposit Details')
   }catch(error) {
     return handleCustomError(res, error)
   }
@@ -44,5 +57,7 @@ async function getUserDetailsController(req, res) {
 
 module.exports = {
   initiateNewDepController,
-  verifyDepositController
+  verifyDepositController,
+  getAllDepositsController,
+  getDepositsDetailsController
 };

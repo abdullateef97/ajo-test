@@ -62,6 +62,26 @@ const verifyDeposit = async (reference) => {
     });
 }
 
+const getAllDeposits = async (userId) => {
+  try{
+    let conditions = {user: userId}
+    let populate = ['user'];
+    return DepsMongoDBHelper.getBulk({conditions, populate})
+  }catch(error){
+    throw(error)
+  }
+}
+
+const getDepositDetails = async (deps_id) => {
+  try{
+    let conditions = {_id: deps_id}
+    let populate = ['user'];
+    return DepsMongoDBHelper.getOneOptimized({conditions, populate})
+  }catch(error){
+    throw(error)
+  }
+}
+
 const _creditDepositor = async (depositorId, amount) => {
   logger.info(`updating user ${ depositorId } account balance with ${ amount }`);
   const conditions = {_id: depositorId};
@@ -80,5 +100,5 @@ const _creditDepositor = async (depositorId, amount) => {
 
 
 module.exports = {
-  initiateNewDeposit, verifyDeposit
+  initiateNewDeposit, verifyDeposit, getAllDeposits, getDepositDetails
 };
