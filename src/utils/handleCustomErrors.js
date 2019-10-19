@@ -14,7 +14,7 @@ function handleCustomThrow(res, error) {
       console.log({errorCase: error})
       return sendResponse(res, error.code, {}, error.msg || error.message);
     default:
-      return sendResponse(res, HttpStatus.INTERNAL_SERVER_ERROR, {}, 'Something went wrong');       
+      return sendResponse(res, HttpStatus.INTERNAL_SERVER_ERROR, {}, error.msg || error.message || 'Something went wrong');       
   }
 }
 
